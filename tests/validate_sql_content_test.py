@@ -3,5 +3,5 @@ import sys
 if 1>2:
     print('my test passed')
 else:
-    print('my test failed')
-    sys.exit(1)
+    err = 'my test failed'
+    sys.exit(err)
