@@ -1,0 +1,33 @@
+name: 'datalake_etl-tests'
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**'
+jobs:
+  validate-sql-content:
+    permissions:
+      contents: read
+      pull-requests: read
+      checks: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.7'
+
+      - name: Run variable check script
+        run: |
+          echo 'start test'
+          python tests/validate_sql_content_test.py
+          echo 'end test'
