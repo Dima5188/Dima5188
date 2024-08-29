@@ -45,4 +45,23 @@ jobs:
           echo "$CHANGED_FILES" > changed_files.txt
 
       - name: Run Python script to check SQL files
-        run: python3 tests/validate_sql_content_test.py changed_files.txt
+        id: check_sql_files
+        run: python3 check_sql_files.py changed_files.txt
+
+      - name: Post comment on PR
+        if: failure()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get the PR number and repository details
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          REPO=${{ github.repository }}
+          
+          # Define the comment body
+          COMMENT_BODY="The check for 'NO_MERGE' in .sql files has failed. Please review the changes."
+          
+          # Post the comment using GitHub API
+          curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
+                          -H "Accept: application/vnd.github.v3+json" \
+                          -d "{\"body\":\"$COMMENT_BODY\"}" \
+                          https://api.github.com/repos/${REPO}/issues/${PR_NUMBER}/comments
