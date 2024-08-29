@@ -34,19 +34,18 @@ jobs:
         id: fetch_files
         run: |
           CHANGED_FILES=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-                            -H "Accept: application/vnd.github.v3+json" \
-                            https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files \
-                            | jq -r '.[] | select(.status == "modified" or .status == "added") | .filename')
+                               -H "Accept: application/vnd.github.v3+json" \
+                               https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files \
+                               | jq -r '.[] | select(.status == "modified" or .status == "added") | .filename')
           
           echo "Changed or added files in this PR:"
           echo "$CHANGED_FILES"
           
-          # Save the list of changed files to an output variable
           echo "$CHANGED_FILES" > changed_files.txt
 
       - name: Run Python script to check SQL files
         id: check_sql_files
-        run: python3 tests/validate_sql_content_test.py changed_files.txt
+        run: python3 check_sql_files.py changed_files.txt
 
       - name: Post comment on PR
         if: failure()
