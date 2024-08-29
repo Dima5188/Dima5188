@@ -21,27 +21,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.7'
-
-      - name: Get file changes
-        id: get_file_changes
-        uses: trilom/file-changes-action@v1.2.4
-        with:
-          output: ' '
-
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Print PR Content
+      - name: Fetch and Print PR JSON Response
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           PR_NUMBER=${{ github.event.pull_request.number }}
           echo "Fetching content of PR #${PR_NUMBER}"
-          curl -s -H "Authorization: token $GITHUB_TOKEN" \
-               -H "Accept: application/vnd.github.v3+json" \
-               https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER} \
-               | jq '.body'
+          
+          # Fetch PR JSON data from GitHub API
+          PR_JSON=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+                         -H "Accept: application/vnd.github.v3+json" \
+                         https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER})
+          
+          echo "PR JSON Response:"
+          echo "$PR_JSON"
+          
+          # Optionally, print the PR body specifically if it's available
+          echo "PR Body Content:"
+          echo "$PR_JSON" | jq '.body'
