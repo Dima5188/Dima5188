@@ -51,13 +51,13 @@ jobs:
       - name: Post comment on PR
         if: failure()
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APP_TOKEN: ${{ secrets.APP_TOKEN }}
         run: |
           PR_NUMBER=${{ github.event.pull_request.number }}
           REPO=${{ github.repository }}
           COMMENT_BODY="The check for 'NO_MERGE' in .sql files has failed. Please review the changes."
           
-          curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
+          curl -s -X POST -H "Authorization: token APP_TOKEN" \
                           -H "Accept: application/vnd.github.v3+json" \
                           -d "{\"body\":\"$COMMENT_BODY\"}" \
                           https://api.github.com/repos/${REPO}/issues/${PR_NUMBER}/comments
