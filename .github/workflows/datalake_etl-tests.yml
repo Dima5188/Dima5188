@@ -45,4 +45,4 @@ jobs:
           echo "$CHANGED_FILES" > changed_files.txt
 
       - name: Run Python script to check SQL files
-        run: python3 validate_sql_content_test.py changed_files.txt
+        run: python3 tests/validate_sql_content_test.py changed_files.txt
