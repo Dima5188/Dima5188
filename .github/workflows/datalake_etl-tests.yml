@@ -46,7 +46,7 @@ jobs:
 
       - name: Run Python script to check SQL files
         id: check_sql_files
-        run: python3 check_sql_files.py changed_files.txt
+        run: python3 tests/check_sql_files.py changed_files.txt
 
       - name: Post comment on PR
         if: failure()
