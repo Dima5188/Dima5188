@@ -56,7 +56,7 @@ jobs:
           REPO=${{ github.repository }}
           COMMENT_BODY="The check for 'NO_MERGE' in .sql files has failed. Please review the changes."
           
-          curl -s -X POST -H "Authorization: token GITHUB_TOKEN" \
+          curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
                           -H "Accept: application/vnd.github.v3+json" \
                           -d "{\"body\":\"$COMMENT_BODY\"}" \
                           https://api.github.com/repos/${REPO}/issues/${PR_NUMBER}/comments
