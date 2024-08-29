@@ -23,11 +23,16 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: List and print changed or added files
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq python3
+
+      - name: Fetch changed or added files
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: fetch_files
         run: |
-          # Fetch the list of changed files from the GitHub API
           CHANGED_FILES=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
                             -H "Accept: application/vnd.github.v3+json" \
                             https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files \
@@ -36,14 +41,8 @@ jobs:
           echo "Changed or added files in this PR:"
           echo "$CHANGED_FILES"
           
-          # Loop through each changed file and print its content
-          for FILE in $CHANGED_FILES; do
-            echo "------------------------------------"
-            echo "File: $FILE"
-            echo "------------------------------------"
-            if [ -f "$FILE" ]; then
-              cat "$FILE"
-            else
-              echo "File $FILE does not exist in the current context."
-            fi
-          done
+          # Save the list of changed files to an output variable
+          echo "$CHANGED_FILES" > changed_files.txt
+
+      - name: Run Python script to check SQL files
+        run: python3 validate_sql_content_test.py changed_files.txt
