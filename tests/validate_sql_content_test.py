@@ -20,7 +20,7 @@ def check_files_for_no_merge(file_list_path):
                 with open(file, 'r') as f:
                     content = f.read()
                     if 'NO_MERGE' in content:
-                        print(f"{RED}ERROR: 'NO_MERGE' found in {file}{RESET}")
+                        print(f"{RED}ERROR: 'NO_MERGE' found in {file}{RESET}\n")
                         found_no_merge = True
             except FileNotFoundError:
                 print(f"File {file} does not exist in the current context.")
