@@ -31,7 +31,7 @@ jobs:
 
       - name: Run SQL check script
         id: check_sql
-        run: python tests/validate_sql_content_test_v2.py
+        run: python tests/validate_sql_content_test.py
 
 #      - name: Post PR comment if issues found
 #        if: failure()  # Only run this step if the previous step failed
