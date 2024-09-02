@@ -26,7 +26,6 @@ def check_files_for_no_merge(file_list_path):
 
     # Exit with a non-zero status if 'NO_MERGE' was found
     if found_no_merge:
-        print(f"{RED}One or more SQL files contain the 'NO_MERGE' string.{RESET}")
         sys.exit(1)
 
 if __name__ == "__main__":
