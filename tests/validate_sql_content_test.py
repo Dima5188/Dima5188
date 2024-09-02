@@ -3,6 +3,7 @@ import sys
 
 # ANSI escape sequences for red text
 RED = '\033[91m'
+BOLD = '\033[1m'
 RESET = '\033[0m'
 
 def check_files_for_no_merge(file_list_path):
@@ -14,7 +15,7 @@ def check_files_for_no_merge(file_list_path):
     found_no_merge = False
     for file in changed_files:
         if file.endswith('.sql'):
-            print(f"Checking file: {file}")
+            print(f"{BOLD}File: {file}{RESET}")
             try:
                 with open(file, 'r') as f:
                     content = f.read()
