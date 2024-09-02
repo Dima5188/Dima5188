@@ -33,18 +33,18 @@ jobs:
         id: check_sql
         run: python tests/validate_sql_content_test_v2.py
 
-      - name: Post PR comment if issues found
-        if: failure()  # Only run this step if the previous step failed
-        env:
-          GITHUB_TOKEN: ${{ secrets.APP_TOKEN }}
-        run: |
-          problematic_files=$(cat /tmp/problematic_files.txt)
-          comment="The following SQL files contain the 'NO_MERGE' string and need to be fixed:\n\n"
-          for file in $problematic_files; do
-            comment+="* $file\n"
-          done
-          curl -s -X POST \
-            -H "Authorization: token $APP_TOKEN" \
-            -H "Accept: application/vnd.github.v3+json" \
-            -d "{\"body\":\"$comment\"}" \
-            https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments
+#      - name: Post PR comment if issues found
+#        if: failure()  # Only run this step if the previous step failed
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.APP_TOKEN }}
+#        run: |
+#          problematic_files=$(cat /tmp/problematic_files.txt)
+#          comment="The following SQL files contain the 'NO_MERGE' string and need to be fixed:\n\n"
+#          for file in $problematic_files; do
+#            comment+="* $file\n"
+#          done
+#          curl -s -X POST \
+#            -H "Authorization: token $APP_TOKEN" \
+#            -H "Accept: application/vnd.github.v3+json" \
+#            -d "{\"body\":\"$comment\"}" \
+#            https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments
