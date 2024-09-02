@@ -6,6 +6,7 @@ RED = '\033[91m'
 BOLD = '\033[1m'
 RESET = '\033[0m'
 
+
 def check_files_for_no_merge(file_list_path):
     # Read the list of changed files
     with open(file_list_path, 'r') as file:
@@ -29,9 +30,9 @@ def check_files_for_no_merge(file_list_path):
     if found_no_merge:
         sys.exit(1)
 
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python check_sql_files.py <file_list_path>")
         sys.exit(1)
 
     file_list_path = sys.argv[1]
