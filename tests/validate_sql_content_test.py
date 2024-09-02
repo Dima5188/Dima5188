@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 import sys
 
+# ANSI escape sequences for red text
+RED = '\033[91m'
+RESET = '\033[0m'
 
 def check_files_for_no_merge(file_list_path):
     # Read the list of changed files
@@ -16,7 +19,7 @@ def check_files_for_no_merge(file_list_path):
                 with open(file, 'r') as f:
                     content = f.read()
                     if 'NO_MERGE' in content:
-                        print(f"ERROR: 'NO_MERGE' found in {file}")
+                        print(f"{RED}ERROR: 'NO_MERGE' found in {file}{RESET}")
                         found_no_merge = True
             except FileNotFoundError:
                 print(f"File {file} does not exist in the current context.")
@@ -25,7 +28,6 @@ def check_files_for_no_merge(file_list_path):
     if found_no_merge:
         raise Exception("One or more SQL files contain the 'NO_MERGE' string.")
 
-
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python check_sql_files.py <file_list_path>")
@@ -33,4 +35,3 @@ if __name__ == "__main__":
 
     file_list_path = sys.argv[1]
     check_files_for_no_merge(file_list_path)
-
