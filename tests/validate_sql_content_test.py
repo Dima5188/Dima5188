@@ -26,7 +26,7 @@ def check_files_for_no_merge(file_list_path):
 
     # Fail the job if 'NO_MERGE' was found in any SQL file
     if found_no_merge:
-        raise Exception("One or more SQL files contain the 'NO_MERGE' string.")
+        raise Exception(f"{RED}One or more SQL files contain the 'NO_MERGE' string.{RESET}")
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
