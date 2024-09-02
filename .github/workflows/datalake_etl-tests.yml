@@ -18,33 +18,45 @@ jobs:
       checks: write
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout PR code
         uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Install dependencies
-        run: pip install requests
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq python3
 
-      - name: Run SQL check script
-        id: check_sql
-        run: python tests/validate_sql_content_test.py
+      - name: Fetch changed or added files
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: fetch_files
+        run: |
+          CHANGED_FILES=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+                               -H "Accept: application/vnd.github.v3+json" \
+                               https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files \
+                               | jq -r '.[] | select(.status == "modified" or .status == "added") | .filename')
+          
+          echo "Changed or added files in this PR:"
+          echo "$CHANGED_FILES"
+          
+          echo "$CHANGED_FILES" > changed_files.txt
 
-#      - name: Post PR comment if issues found
-#        if: failure()  # Only run this step if the previous step failed
+      - name: Run Python script to check SQL files
+        id: check_sql_files
+        run: python3 tests/validate_sql_content_test.py changed_files.txt
+
+#      - name: Post comment on PR
+#        if: failure()
 #        env:
-#          GITHUB_TOKEN: ${{ secrets.APP_TOKEN }}
+#          APP_TOKEN: ${{ secrets.APP_TOKEN }}
 #        run: |
-#          problematic_files=$(cat /tmp/problematic_files.txt)
-#          comment="The following SQL files contain the 'NO_MERGE' string and need to be fixed:\n\n"
-#          for file in $problematic_files; do
-#            comment+="* $file\n"
-#          done
-#          curl -s -X POST \
-#            -H "Authorization: token $APP_TOKEN" \
-#            -H "Accept: application/vnd.github.v3+json" \
-#            -d "{\"body\":\"$comment\"}" \
-#            https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments
+#          PR_NUMBER=${{ github.event.pull_request.number }}
+#          REPO=${{ github.repository }}
+#          COMMENT_BODY="The check for 'NO_MERGE' in .sql files has failed. Please review the changes."
+#
+#          curl -s -X POST -H "Authorization: token APP_TOKEN" \
+#                          -H "Accept: application/vnd.github.v3+json" \
+#                          -d "{\"body\":\"$COMMENT_BODY\"}" \
+#                          https://api.github.com/repos/${REPO}/issues/${PR_NUMBER}/comments
