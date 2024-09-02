@@ -24,9 +24,10 @@ def check_files_for_no_merge(file_list_path):
             except FileNotFoundError:
                 print(f"File {file} does not exist in the current context.")
 
-    # Fail the job if 'NO_MERGE' was found in any SQL file
+    # Exit with a non-zero status if 'NO_MERGE' was found
     if found_no_merge:
-        raise Exception(f"{RED}One or more SQL files contain the 'NO_MERGE' string.{RESET}")
+        print(f"{RED}One or more SQL files contain the 'NO_MERGE' string.{RESET}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
