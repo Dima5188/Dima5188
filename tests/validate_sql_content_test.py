@@ -31,7 +31,7 @@ def check_configuration(file_list):
                     # Check if the Key configuration variable is set in the template content
                     for key in config_dict.keys():
                         if not re.search(fr'{{\s*{key}\s*}}', content):
-                            errors.append(f"{RED}Error: Template '{key}' doesnt exists in file although it is set in the configuration part. [{file}]{RESET}\n")
+                            errors.append(f"{RED}Error: Template '{{key}}' doesnt exists in file although it is set in the configuration part. [{file}]{RESET}\n")
 
                     # Check if the Jinja2 template variables exist in the configuration part
                     matches = re.findall(r'{{\s*([\w_]+)\s*}}', content)
