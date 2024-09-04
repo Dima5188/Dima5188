@@ -1,10 +1,39 @@
 #!/usr/bin/env python
 import sys
+import re
 
 # ANSI escape sequences for red text
 RED = '\033[91m'
 BOLD = '\033[1m'
 RESET = '\033[0m'
+
+
+def check_configuration(file_list):
+    """Check if any '.sql' file contains the specified search text."""
+    try:
+        with open(file_list, 'r') as file:
+            changed_files = file.read().splitlines()
+    except FileNotFoundError:
+        return f"{RED}ERROR: File list '{file_list}' not found.{RESET}"
+
+    errors = []
+    for file in changed_files:
+        if file.endswith('.sql'):
+            try:
+                with open(file, 'r') as f:
+                    content = f.read()
+                    # Extract config attributes from the config part if it exists
+                    pattern = r"(\w+)\s*=\s*'([^']+)'"
+                    matches = re.findall(pattern, content)
+                    config_dict = dict(matches)
+                    errors.append(f"config_dict: {config_dict}")
+                    # if search_text in content:
+                    #     errors.append(f"{RED}Error: '{search_text}' found in {file}{RESET}\n")
+            except FileNotFoundError:
+                errors.append(f"{RED}Error: File '{file}' does not exist in the current context.{RESET}")
+    return errors if errors else "Success"
+
+
 
 
 def check_files_for_text(file_list, search_text):
