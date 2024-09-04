@@ -96,7 +96,9 @@ if __name__ == "__main__":
         sys.exit(1)
 
     file_list_path = sys.argv[1]
+    print(f"file list path: {file_list_path}")
     commit_message = sys.argv[2]
+    print(f"commit message: {commit_message}")
 
     # Check for the bypass flag in the commit message
     bypass_checks = '--bypass-checks' in commit_message
