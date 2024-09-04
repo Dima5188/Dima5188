@@ -22,9 +22,9 @@ def check_files_for_text(file_list, search_text):
                 with open(file, 'r') as f:
                     content = f.read()
                     if search_text in content:
-                        errors.append(f"{RED}ERROR: '{search_text}' found in {file}{RESET}")
+                        errors.append(f"{RED}Error: '{search_text}' found in {file}{RESET}\n")
             except FileNotFoundError:
-                errors.append(f"{RED}ERROR: File '{file}' does not exist in the current context.{RESET}")
+                errors.append(f"{RED}Error: File '{file}' does not exist in the current context.{RESET}")
     return errors if errors else "Success"
 
 
