@@ -27,17 +27,20 @@ def check_configuration(file_list):
                     matches = re.findall(pattern, content)
                     config_dict = dict(matches)
                     print(f"config_dict: {config_dict}")
+
+                    # Check if the Key configuration variable is set in the template content
                     for key in config_dict.keys():
-                        # Check if the max_updated_at variable is set in the template content
                         if not re.search(fr'{{\s*{key}\s*}}', content):
                             errors.append(f"{RED}Error: Template '{key}' doesnt exists in file although it is set in the configuration part. [{file}]{RESET}\n")
 
-                    # Regular expression to match all Jinja2 template variables
-                    pattern = r'{{\s*([\w_]+)\s*}}'
-                    # Find all matches
-                    matches = re.findall(pattern, content)
-                    # Print the list of variables found
-                    print(f'Jinja2 vars in code: {matches}')
+                    # Check if the Jinja2 template variables exist in the configuration part
+                    matches = re.findall(r'{{\s*([\w_]+)\s*}}', content)
+                    for match_value in matches:
+                        if match_value not in config_dict:
+                            errors.append(f"{RED}Error: No configuration assigment for Jinja2 template variable '{match_value}'. [{file}]{RESET}\n")
+
+
+
 
 
             except FileNotFoundError:
