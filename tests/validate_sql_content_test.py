@@ -23,25 +23,24 @@ def check_configuration(file_list):
                 with open(file, 'r') as f:
                     content = f.read()
                     # Extract config attributes from the config part if it exists
-                    pattern = r"(\w+)\s*=\s*'([^']+)'"
-                    matches = re.findall(pattern, content)
-                    config_dict = dict(matches)
-                    print(f"config_dict: {config_dict}")
+                    config_pattern = r"(\w+)\s*=\s*'([^']+)'"
+                    config_dict = dict(re.findall(config_pattern, content))
 
-                    # Check if the Key configuration variable is set in the template content
+                    # Find Jinja2 template variables
+                    template_pattern = r'{{\s*([\w_]+)\s*}}'
+                    template_vars = re.findall(template_pattern, content)
+
+                    # Check if every config variable is used in the template
                     for key in config_dict.keys():
-                        if not re.search(fr'{{\s*{key}\s*}}', content):
-                            errors.append(f"{RED}Error: Template '{{key}}' doesnt exists in file although it is set in the configuration part. [{file}]{RESET}\n")
+                        if key not in template_vars:
+                            errors.append(f"{RED}Error: Configuration variable '{key}' is set but not used in the template. "
+                                          f"[{file}]{RESET}\n")
 
-                    # Check if the Jinja2 template variables exist in the configuration part
-                    matches = re.findall(r'{{\s*([\w_]+)\s*}}', content)
-                    for match_value in matches:
-                        if match_value not in config_dict:
-                            errors.append(f"{RED}Error: No configuration assigment for Jinja2 template variable '{match_value}'. [{file}]{RESET}\n")
-
-
-
-
+                    # Check if every template variable is configured
+                    for var in template_vars:
+                        if var not in config_dict:
+                            errors.append(f"{RED}Error: Jinja2 template variable '{var}' is used but not configured. "
+                                          f"[{file}]{RESET}\n")
 
             except FileNotFoundError:
                 errors.append(f"{RED}Error: File '{file}' does not exist in the current context.{RESET}")

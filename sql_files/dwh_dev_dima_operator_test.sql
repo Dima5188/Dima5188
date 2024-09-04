@@ -1,3 +1,9 @@
+{{
+config(
+    my_at='select max(batch_datetime) from dwh_dev.dima_operator_test'
+)
+}}
+
 select
     a.*
 from gold_production.dwh_dev.dima_operator_test a
