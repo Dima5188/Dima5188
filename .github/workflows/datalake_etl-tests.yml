@@ -46,7 +46,7 @@ jobs:
 
       - name: Print commit details
         run: |
-          echo "${{toJSON(github.event)}}"
+          echo "${{toJSON(github.event.head_commit)}}"
 
       - name: Run Python script to check SQL files
         id: check_sql_files
