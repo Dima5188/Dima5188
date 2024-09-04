@@ -11,7 +11,7 @@ on:
     paths:
       - '**'
 jobs:
-  validate-sql-content:
+  lookml-file-verification:
     permissions:
       contents: read
       pull-requests: read
