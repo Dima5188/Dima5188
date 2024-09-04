@@ -31,8 +31,15 @@ def check_configuration(file_list):
                         # Check if the max_updated_at variable is set in the template content
                         if not re.search(fr'{{\s*{key}\s*}}', content):
                             errors.append(f"{RED}Error: Template '{key}' doesnt exists in file although it is set in the configuration part. [{file}]{RESET}\n")
-                    # if search_text in content:
-                    #     errors.append(f"{RED}Error: '{search_text}' found in {file}{RESET}\n")
+
+                    # Regular expression to match all Jinja2 template variables
+                    pattern = r'{{\s*([\w_]+)\s*}}'
+                    # Find all matches
+                    matches = re.findall(pattern, content)
+                    # Print the list of variables found
+                    print(f'Jinja2 vars in code: {matches}')
+
+
             except FileNotFoundError:
                 errors.append(f"{RED}Error: File '{file}' does not exist in the current context.{RESET}")
     return errors if errors else "Success"
