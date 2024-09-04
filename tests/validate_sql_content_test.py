@@ -38,6 +38,10 @@ def check_configuration(file, content):
     # Find Jinja2 template variables
     template_pattern = r'{{\s*([\w_]+)\s*}}'
     template_vars = re.findall(template_pattern, content)
+    exclude_out_of_scope_vars = ['date_frame']
+
+    # Create a new list with items not in remove_list
+    template_vars = [item for item in template_vars if item not in exclude_out_of_scope_vars]
 
     # Check if every config variable is used in the template
     for key in config_dict.keys():
