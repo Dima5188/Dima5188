@@ -44,7 +44,7 @@ def check_access_filter(file):
             matches = re.findall(pattern, content, re.MULTILINE)
 
             if not matches:
-                errors.append(f"{RED}Error: No 'access_filter' found in [{file}].{END}")
+                errors.append(f"{RED}Error: 'merchant_id' user attribute is required for filtering LookML models, but not found.[{file}]{END}")
             else:
                 access_filters = []
                 for match in matches:
@@ -55,7 +55,7 @@ def check_access_filter(file):
                     access_filters.append(access_filter)
 
                 if not any(access_filter_item.get('user_attribute') == 'merchant_id' for access_filter_item in access_filters):
-                    errors.append(f"{RED}Error: 'merchant_id' not found in user_attribute in [{file}].{END}")
+                    errors.append(f"{RED}Error: 'merchant_id' user attribute is required for filtering LookML models, but not found.[{file}]{END}")
     except FileNotFoundError:
         errors.append(f"{RED}Error: File '{file}' does not exist.{END}")
 
