@@ -10,8 +10,8 @@ week_start_day: sunday
 # Explores
 # Policy Checkout Details
 explore: dima_table {
-  access_filter: {field: dima_table.merchant
-                  user_attribute: merchant_id}
+  access_filter: {field: dima_table.merchant_id
+                  user_attribute: merchant}
   access_filter: {field: dima_table.order_id
                   user_attribute: dima
                   }
