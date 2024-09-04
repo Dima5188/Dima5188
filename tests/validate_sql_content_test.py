@@ -35,7 +35,6 @@ def check_configuration(file_list):
 
 
 
-
 def check_files_for_text(file_list, search_text):
     """Check if any '.sql' file contains the specified search text."""
     try:
@@ -61,7 +60,8 @@ def run_all_checks(file_list):
     """Run all the defined checks."""
     checks = [
         lambda fl: check_files_for_text(fl, 'NO_MERGE'),
-        lambda fl: check_files_for_text(fl, 'DEV_FILE')
+        lambda fl: check_files_for_text(fl, 'DEV_FILE'),
+        lambda fl: check_configuration(fl),
     ]
 
     all_errors = []
