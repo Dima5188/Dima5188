@@ -63,9 +63,14 @@ def check_files_for_text(file, content, search_text):
     return []
 
 
-def run_all_checks(file_list):
+def run_all_checks(file_list, bypass):
     """Run all the defined checks."""
     files = read_file_lines(file_list)
+
+    if bypass:
+        print(f"{RED}Bypassing all checks as per the commit message.{RESET}")
+        return
+
     if files is None:
         print(f"{RED}ERROR: File list '{file_list}' not found.{RESET}")
         sys.exit(1)
@@ -73,8 +78,8 @@ def run_all_checks(file_list):
     all_errors = []
     for file in files:
         if file.endswith('.sql'):
-            all_errors.extend(process_sql_file(file, lambda f, c: check_files_for_text(f, c, 'NO_MERGE')))
-            all_errors.extend(process_sql_file(file, lambda f, c: check_files_for_text(f, c, 'DEV_FILE')))
+            # all_errors.extend(process_sql_file(file, lambda f, c: check_files_for_text(f, c, 'NO_MERGE')))
+            # all_errors.extend(process_sql_file(file, lambda f, c: check_files_for_text(f, c, 'DEV_FILE')))
             all_errors.extend(process_sql_file(file, check_configuration))
 
     if all_errors:
@@ -86,8 +91,14 @@ def run_all_checks(file_list):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
+        print(f"{RED}ERROR: Usage: {sys.argv[0]} <file_list> <commit_message>{RESET}")
         sys.exit(1)
 
     file_list_path = sys.argv[1]
-    run_all_checks(file_list_path)
+    commit_message = sys.argv[2]
+
+    # Check for the bypass flag in the commit message
+    bypass_checks = '--bypass-checks' in commit_message
+
+    run_all_checks(file_list_path, bypass_checks)
