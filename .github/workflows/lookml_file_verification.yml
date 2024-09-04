@@ -40,4 +40,4 @@ jobs:
 
       - name: Run Python script to check SQL files
         id: check_sql_files
-        run: python3 tests/lookml_file_verification.py.py changed_files.txt "$(git show -s --format=%s)"
+        run: python3 tests/lookml_file_verification.py changed_files.txt "$(git show -s --format=%s)"
