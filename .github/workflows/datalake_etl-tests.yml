@@ -48,6 +48,10 @@ jobs:
         run: |
           echo "${{toJSON(github.event.head_commit)}}"
 
+      - name: Print head git commit message
+        run: |
+          echo "$(git show -s --format=%s)" 
+
       - name: Run Python script to check SQL files
         id: check_sql_files
         run: python3 tests/validate_sql_content_test.py changed_files.txt "${{ github.event.pull_request.title }}"
