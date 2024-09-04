@@ -7,8 +7,8 @@ config(
 
 select
     a.*
-from gold_production.dwh_dev.dima_operator_test a
-left join silver_production.main.merchants m on a.id = m.id
+from gold.dwh_dev.dima_operator_test a
+left join silver.merchants m on a.id = m.id
 
 where 1=1
 
