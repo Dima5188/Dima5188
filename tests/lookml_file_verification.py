@@ -22,9 +22,10 @@ def run_checks(file_list, bypass):
         return
 
     all_errors = []
+    required_attributes = ['merchant_id', 'dima']  # Add any other required attributes here
     for file in files:
         if file.endswith('.lkml'):
-            all_errors.extend(check_access_filter(file))
+            all_errors.extend(check_access_filter(file, required_attributes))
 
     if all_errors:
         for error in all_errors:
@@ -34,8 +35,8 @@ def run_checks(file_list, bypass):
         print(f"{GREEN}All checks passed successfully.{END}")
 
 
-def check_access_filter(file):
-    """Check for 'access_filter' presence and 'merchant_id' user_attribute."""
+def check_access_filter(file, required_attributes):
+    """Check for 'access_filter' presence and specified user attributes."""
     errors = []
     try:
         with open(file, 'r') as f:
@@ -44,18 +45,14 @@ def check_access_filter(file):
             matches = re.findall(pattern, content, re.MULTILINE)
 
             if not matches:
-                errors.append(f"{RED}Error: 'merchant_id' user attribute is required for filtering LookML models, but not found.[{file}]{END}")
+                errors.append(f"{RED}Error: Required user attributes {', '.join(required_attributes)} are missing in LookML models. [{file}]{END}")
             else:
-                access_filters = []
-                for match in matches:
-                    access_filter = {
-                        'field': match[0],  # Capture the field value
-                        'user_attribute': match[1] if match[1] else None  # Capture the user_attribute value if present
-                    }
-                    access_filters.append(access_filter)
+                access_filters = [{'field': match[0], 'user_attribute': match[1] or None} for match in matches]
 
-                if not any(access_filter_item.get('user_attribute') == 'merchant_id' for access_filter_item in access_filters):
-                    errors.append(f"{RED}Error: 'merchant_id' user attribute is required for filtering LookML models, but not found.[{file}]{END}")
+                # Check for all required user attributes
+                missing_attributes = [attr for attr in required_attributes if not any(access_filter.get('user_attribute') == attr for access_filter in access_filters)]
+                if missing_attributes:
+                    errors.append(f"{RED}Error: Required user attributes {', '.join(missing_attributes)} are missing in LookML models. [{file}]{END}")
     except FileNotFoundError:
         errors.append(f"{RED}Error: File '{file}' does not exist.{END}")
 
