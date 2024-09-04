@@ -4,8 +4,9 @@ import re
 
 # ANSI escape sequences for red text
 RED = '\033[91m'
+GREEN = '\033[92m'
 BOLD = '\033[1m'
-RESET = '\033[0m'
+END = '\033[0m'
 
 
 def read_file_lines(file_list):
@@ -24,7 +25,7 @@ def process_sql_file(file, process_func):
             content = f.read()
             return process_func(file, content)
     except FileNotFoundError:
-        return [f"{RED}Error: File '{file}' does not exist in the current context.{RESET}"]
+        return [f"{RED}Error: File '{file}' does not exist in the current context.{END}"]
 
 
 def check_configuration(file, content):
@@ -46,12 +47,12 @@ def check_configuration(file, content):
     # Check if every config variable is used in the template
     for key in config_dict.keys():
         if key not in template_vars:
-            errors.append(f"{RED}Error: Configuration variable '{key}' is set but not used in the template. [{file}]{RESET}\n")
+            errors.append(f"{RED}Error: Configuration variable '{key}' is set but not used in the template. [{file}]{END}\n")
 
     # Check if every template variable is configured
     for var in template_vars:
         if var not in config_dict:
-            errors.append(f"{RED}Error: Jinja2 template variable '{var}' is used but not configured. [{file}]{RESET}\n")
+            errors.append(f"{RED}Error: Jinja2 template variable '{var}' is used but not configured. [{file}]{END}\n")
 
     return errors
 
@@ -59,7 +60,7 @@ def check_configuration(file, content):
 def check_files_for_text(file, content, search_text):
     """Check if any '.sql' file contains the specified search text."""
     if search_text in content:
-        return [f"{RED}Error: '{search_text}' found in {file}{RESET}\n"]
+        return [f"{RED}Error: '{search_text}' found in {file}{END}\n"]
     return []
 
 
@@ -68,11 +69,11 @@ def run_all_checks(file_list, bypass):
     files = read_file_lines(file_list)
 
     if bypass:
-        print(f"{RED}Bypassing all checks as per the commit message.{RESET}")
+        print(f"{GREEN}Bypassing all checks as per the commit message.{END}")
         return
 
     if files is None:
-        print(f"{RED}ERROR: File list '{file_list}' not found.{RESET}")
+        print(f"{RED}ERROR: File list '{file_list}' not found.{END}")
         sys.exit(1)
 
     all_errors = []
@@ -92,7 +93,7 @@ def run_all_checks(file_list, bypass):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print(f"{RED}ERROR: Usage: {sys.argv[0]} <file_list> <commit_message>{RESET}")
+        print(f"{RED}ERROR: Usage: {sys.argv[0]} <file_list> <commit_message>{END}")
         sys.exit(1)
 
     file_list_path = sys.argv[1]
