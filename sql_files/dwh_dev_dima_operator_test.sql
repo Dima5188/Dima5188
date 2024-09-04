@@ -13,7 +13,7 @@ where 1=1
 
 {% if is_incremental %}
       and a.batch_date >= {{ date_frame }}
-      and a.batch_datetime >= {{ max_updated_at }}
+      and a.batch_datetime >= {{ max_updated }}
 {% endif %}
 
 qualify row_number() over (partition by a.id order by a.batch_datetime desc) = 1

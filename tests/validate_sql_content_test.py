@@ -26,13 +26,16 @@ def check_configuration(file_list):
                     pattern = r"(\w+)\s*=\s*'([^']+)'"
                     matches = re.findall(pattern, content)
                     config_dict = dict(matches)
-                    errors.append(f"config_dict: {config_dict}")
+                    print(f"config_dict: {config_dict}")
+                    for key in config_dict.keys():
+                        # Check if the max_updated_at variable is set in the template content
+                        if not re.search(fr'{{\s*{key}\s*}}', content):
+                            errors.append(f"Template '{key}' doesnt exists in file although it is set in the configuration part")
                     # if search_text in content:
                     #     errors.append(f"{RED}Error: '{search_text}' found in {file}{RESET}\n")
             except FileNotFoundError:
                 errors.append(f"{RED}Error: File '{file}' does not exist in the current context.{RESET}")
     return errors if errors else "Success"
-
 
 
 def check_files_for_text(file_list, search_text):
