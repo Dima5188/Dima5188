@@ -49,6 +49,7 @@ jobs:
           echo "Pull Request Title: ${{ github.event.pull_request.title }}"
           echo "Pull Request Body: ${{ github.event.pull_request.body }}"
           echo "Head Commit Message: ${{ github.event.head_commit.message }}"
+          echo "Head Commit Message (workflow_run): ${{ github.event.workflow_run.head_commit.message }}"
           echo "Pull Request Number: ${{ github.event.pull_request.number }}"
 
       - name: Run Python script to check SQL files
