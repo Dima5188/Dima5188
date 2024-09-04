@@ -10,4 +10,5 @@ week_start_day: sunday
 # Explores
 # Policy Checkout Details
 explore: dima_table {
+
 }
