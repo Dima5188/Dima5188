@@ -30,7 +30,7 @@ def check_configuration(file_list):
                     for key in config_dict.keys():
                         # Check if the max_updated_at variable is set in the template content
                         if not re.search(fr'{{\s*{key}\s*}}', content):
-                            errors.append(f"Template '{key}' doesnt exists in file although it is set in the configuration part")
+                            errors.append(f"{RED}Error: Template '{key}' doesnt exists in file although it is set in the configuration part. [{file}]{RESET}\n")
                     # if search_text in content:
                     #     errors.append(f"{RED}Error: '{search_text}' found in {file}{RESET}\n")
             except FileNotFoundError:
