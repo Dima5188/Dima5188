@@ -11,6 +11,7 @@ on:
     paths:
       - '**'
 jobs:
+
   validate-sql-content:
     permissions:
       contents: read
@@ -22,11 +23,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y jq python3
 
       - name: Fetch changed or added files
         env:
@@ -45,4 +41,4 @@ jobs:
 
       - name: Run Python script to check SQL files
         id: check_sql_files
-        run: python3 tests/validate_sql_content_test.py changed_files.txt
+        run: python3 tests/validate_sql_content_test.py changed_files.txt "$(git show -s --format=%s)"
