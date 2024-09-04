@@ -123,6 +123,7 @@ def run_all_checks(file_list, bypass):
     for file in files:
         if file.endswith('.sql'):
             # Perform the configuration check on each SQL file
+            # all_errors.extend(process_sql_file(file, lambda f, c: check_files_for_text(f, c, 'DEV_FILE')))
             all_errors.extend(process_sql_file(file, check_configuration))
 
     if all_errors:
@@ -142,7 +143,6 @@ if __name__ == "__main__":
     # Assign command-line arguments to variables
     file_list_path = sys.argv[1]
     commit_message = sys.argv[2]
-    print(f"commit message: {commit_message}")
 
     # Check for the bypass flag in the commit message
     bypass_checks = '--bypass-checks' in commit_message
