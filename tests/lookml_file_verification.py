@@ -31,7 +31,7 @@ def run_checks(file_list, bypass):
             print(error)
         sys.exit(1)  # Exit if there are errors
     else:
-        print("All checks passed successfully.")
+        print(f"{GREEN}All checks passed successfully.{END}")
 
 
 def check_access_filter(file):
