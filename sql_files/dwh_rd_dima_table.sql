@@ -1,7 +1,6 @@
 {{
 config(
-    max_updated_at='select max(batch_datetime) from dwh_dev.dima_operator_test',
-    test = 'Dima'
+    max_updated_at='select max(batch_datetime) from dwh_dev.dima_operator_test'
 )
 }}
 
