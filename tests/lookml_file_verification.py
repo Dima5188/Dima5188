@@ -46,14 +46,24 @@ def check_access_filter(file, required_attributes):
             matches = re.findall(pattern, content, re.MULTILINE)
 
             if not matches:
-                errors.append(f"{RED}Error: Required user attribute{BOLD}{'' if len(required_attributes) == 1 else 's'} {', '.join(required_attributes)}{END}{RED} {'is' if len(required_attributes) == 1 else 'are'} missing in LookML model{'s' if len(required_attributes) > 1 else ''}. [{file}]{END}")
+                quoted_attributes = ', '.join([f"'{attr}'" for attr in required_attributes])
+                errors.append(
+                    f"{RED}Error: Required user attribute{BOLD}{'' if len(required_attributes) == 1 else 's'} "
+                    f"{quoted_attributes}{END}{RED} {'is' if len(required_attributes) == 1 else 'are'} missing in LookML model"
+                    f"{'s' if len(required_attributes) > 1 else ''}. [{file}]{END}"
+                )
             else:
                 access_filters = [{'field': match[0], 'user_attribute': match[1] or None} for match in matches]
 
                 # Check for all required user attributes
                 missing_attributes = [attr for attr in required_attributes if not any(access_filter.get('user_attribute') == attr for access_filter in access_filters)]
                 if missing_attributes:
-                    errors.append(f"{RED}Error: Required user attribute{BOLD}{'' if len(missing_attributes) == 1 else 's'} {', '.join(missing_attributes)}{END}{RED} {'is' if len(missing_attributes) == 1 else 'are'} missing in LookML model{'s' if len(missing_attributes) > 1 else ''}. [{file}]{END}")
+                    quoted_attributes = ', '.join([f"'{attr}'" for attr in missing_attributes])
+                    errors.append(
+                        f"{RED}Error: Required user attribute{BOLD}{'' if len(missing_attributes) == 1 else 's'} "
+                        f"{quoted_attributes}{END}{RED} {'is' if len(missing_attributes) == 1 else 'are'} missing in LookML model"
+                        f"{'s' if len(missing_attributes) > 1 else ''}. [{file}]{END}"
+                    )
     except FileNotFoundError:
         errors.append(f"{RED}Error: File '{file}' does not exist.{END}")
 
