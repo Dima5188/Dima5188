@@ -52,7 +52,7 @@ def check_access_filter(file, required_attributes):
                 # Check for all required user attributes
                 missing_attributes = [attr for attr in required_attributes if not any(access_filter.get('user_attribute') == attr for access_filter in access_filters)]
                 if missing_attributes:
-                    errors.append(f"{RED}Error: Required user attributes {', '.join(missing_attributes)} are missing in LookML models. [{file}]{END}")
+                    errors.append(f"{RED}Error: Required user attribute{'' if len(missing_attributes) == 1 else 's'} {', '.join(missing_attributes)} {'is' if len(missing_attributes) == 1 else 'are'} missing in LookML model{'s' if len(missing_attributes) > 1 else ''}. [{file}]{END}")
     except FileNotFoundError:
         errors.append(f"{RED}Error: File '{file}' does not exist.{END}")
 
