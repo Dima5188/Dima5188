@@ -58,8 +58,12 @@ def check_configuration(file, content):
     errors = []
 
     # Extract configuration attributes from the SQL file
-    config_pattern = r"(\w+)\s*=\s*'([^']+)'"
-    config_dict = dict(re.findall(config_pattern, content))
+    config_pattern = r"\{\{\s*config\((.*?)\)\s*\}\}"
+    inner_config_pattern = r"(\w+)\s*=\s*'([^']+)'"
+    config_match = re.search(config_pattern, content, re.DOTALL)
+    if config_match:
+        config_block = config_match.group(1)  # Extract the part inside config(...)
+        config_dict = dict(re.findall(inner_config_pattern, config_block))
 
     # Find Jinja2 template variables in the SQL file
     template_pattern = r'{{\s*([\w_]+)\s*}}'
