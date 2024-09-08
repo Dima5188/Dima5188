@@ -64,6 +64,8 @@ def check_configuration(file, content):
     if config_match:
         config_block = config_match.group(1)  # Extract the part inside config(...)
         config_dict = dict(re.findall(inner_config_pattern, config_block))
+    else:
+        config_dict = {}
 
     # Find Jinja2 template variables in the SQL file
     template_pattern = r'{{\s*([\w_]+)\s*}}'
