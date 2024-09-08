@@ -25,6 +25,7 @@ def run_checks(file_list, bypass):
     all_errors = []
     required_attributes = ['merchant_id', 'dima']  # Add any other required attributes here
     for file in files:
+        print(f"my file name is {file}")
         if file.endswith('.lkml') and not file.endswith('_DEV.lkml'):
             all_errors.extend(check_access_filter(file, required_attributes))
 
