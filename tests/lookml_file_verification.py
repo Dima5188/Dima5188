@@ -24,7 +24,7 @@ def run_checks(file_list, bypass):
     all_errors = []
     required_attributes = ['merchant_id', 'dima']  # Add any other required attributes here
     for file in files:
-        if file.endswith('.lkml'):
+        if file.endswith('.lkml') and not file.endswith('_DEV.lkml'):
             all_errors.extend(check_access_filter(file, required_attributes))
 
     if all_errors:
@@ -45,7 +45,7 @@ def check_access_filter(file, required_attributes):
             matches = re.findall(pattern, content, re.MULTILINE)
 
             if not matches:
-                errors.append(f"{RED}Error: Required user attributes {', '.join(required_attributes)} are missing in LookML models. [{file}]{END}")
+                errors.append(f"{RED}Error: Required user attribute{'' if len(required_attributes) == 1 else 's'} {', '.join(required_attributes)} {'is' if len(required_attributes) == 1 else 'are'} missing in LookML model{'s' if len(required_attributes) > 1 else ''}. [{file}]{END}")
             else:
                 access_filters = [{'field': match[0], 'user_attribute': match[1] or None} for match in matches]
 
