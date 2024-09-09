@@ -11,4 +11,4 @@ week_start_day: sunday
 # Policy Checkout Details
 explore: dima_table {
 }
-user_attribute: merchant_id
+access_filter: {user_attribute: merchant_id}
