@@ -9,7 +9,7 @@ BOLD = '\033[1m'  # Bold text
 END = '\033[0m'  # Reset to default text formatting
 
 
-def run_checks(file_list, bypass):
+def run_checks(file_list):
     """Read files and perform all checks."""
     try:
         with open(file_list, 'r') as file:
@@ -18,12 +18,12 @@ def run_checks(file_list, bypass):
         print(f"{RED}ERROR: File list '{file_list}' not found.{END}")
         sys.exit(1)
 
-    if bypass:
-        print(f"{GREEN}Bypassing all checks as per the commit message.{END}")
-        return
+    # if bypass:
+    #     print(f"{GREEN}Bypassing all checks as per the commit message.{END}")
+    #     return
 
     all_errors = []
-    required_attributes = ['merchant_id', 'dima']  # Add any other required attributes here
+    required_attributes = ['merchant_id']  # Add any other required attributes here
     for file in files:
         print(f"my file name is {file}")
         if file.endswith('.lkml') and not file.endswith('_DEV.lkml'):
@@ -78,6 +78,5 @@ if __name__ == "__main__":
 
     file_list_path = sys.argv[1]
     commit_message = sys.argv[2]
-    bypass_checks = '--bypass-checks' in commit_message
 
-    run_checks(file_list_path, bypass_checks)
+    run_checks(file_list_path)
