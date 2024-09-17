@@ -1,10 +1,5 @@
 name: 'lookml_file_verification'
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '**'
   pull_request:
     branches:
       - main
