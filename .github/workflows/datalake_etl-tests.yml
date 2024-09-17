@@ -1,10 +1,5 @@
 name: 'datalake_etl-tests'
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '**'
   pull_request:
     branches:
       - main
