@@ -1,6 +1,6 @@
 connection: "external_small"
 
-### Owner - Tal ###
+### Owner  Tal ###
 
 include: "/**/*.view.lkml"          # include all views in this project
 include: "/**/*.dashboard.lookml"   # include a LookML dashboard called my_dashboard
@@ -24,6 +24,6 @@ explore: user_attribute_test {
   fields: [ALL_FIELDS*]
    access_filter: {
      field: user_attribute_test.merchant
-     user_attribute: merchant
+     user_attribute: merchant_id
    }
 }
