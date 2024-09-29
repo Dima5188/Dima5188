@@ -24,6 +24,6 @@ explore: user_attribute_test {
   fields: [ALL_FIELDS*]
    access_filter: {
      field: user_attribute_test.merchant
-     user_attribute: merchant_id
+     user_attribute: merchant
    }
 }
