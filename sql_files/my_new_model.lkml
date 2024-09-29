@@ -1,6 +1,6 @@
 connection: "external_small"
 
-### Owner - Tal ###
+### Owner  Tal ###
 
 include: "/**/*.view.lkml"          # include all views in this project
 include: "/**/*.dashboard.lookml"   # include a LookML dashboard called my_dashboard
