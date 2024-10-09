@@ -10,13 +10,10 @@ jobs:
     permissions:
       contents: read
       pull-requests: read
-      checks: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout PR code
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Fetch changed or added files
         env:
@@ -32,7 +29,6 @@ jobs:
           echo "$CHANGED_FILES"
           
           echo "$CHANGED_FILES" > changed_files.txt
-
       - name: Run Python script to check SQL files
         id: check_sql_files
-        run: python3 tests/lookml_file_verification.py changed_files.txt "$(git show -s --format=%s)"
+        run: python3 workflow_tests/lookml_file_verification.py changed_files.txt "$(git show -s --format=%s)"
