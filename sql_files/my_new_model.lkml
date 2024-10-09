@@ -19,8 +19,3 @@ access_filter: {
 
 
 }
-
-explore: user_attribute_test {
-
-   }
-}
